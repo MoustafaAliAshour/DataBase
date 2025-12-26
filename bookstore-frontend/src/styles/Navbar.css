@@ -1,0 +1,32 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1f2937;
+  color: white;
+  padding: 10px 20px;
+}
+
+.logo a {
+  color: #fbbf24;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cart-icon {
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+}
