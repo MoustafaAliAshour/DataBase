@@ -1,0 +1,22 @@
+
+BOOK(ISBN PK, title, pub_year, selling_price, category, pub_id FK)
+
+BOOK_AUTHOR(ISBN PK FK, author_id PK FK)
+
+AUTHOR(author_id PK, name)
+
+PUBLISHER(pub_id PK, name, address, phone)
+
+STOCK(ISBN PK FK, quantity, threshold)
+
+PUBLISHER_ORDER(order_id PK, isbn FK, pub_id FK, order_date, quantity, status)
+
+CUSTOMER(cust_id PK, fname, lname, email, phone, address,username,password,role)
+
+CART(cart_id PK, cust_id FK)
+
+CART_ITEMS(cart_id PK FK, isbn PK FK, quantity)
+
+PURCHASES(pur_id PK, date, total_amount, cust_id FK)
+
+PURCHASE_ITEM(pur_id PK FK, isbn PK FK, quantity, price)

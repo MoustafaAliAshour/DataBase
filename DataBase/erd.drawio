@@ -1,0 +1,95 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Bookstore ERD">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- BOOK -->
+        <mxCell id="BOOK" value="BOOK&#10;────────────&#10;ISBN (PK)&#10;title&#10;pub_year&#10;selling_price&#10;category&#10;pub_id (FK)"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="180" width="260" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- AUTHOR -->
+        <mxCell id="AUTHOR" value="AUTHOR&#10;────────────&#10;author_id (PK)&#10;name"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="180" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- BOOK_AUTHOR -->
+        <mxCell id="BOOK_AUTHOR" value="BOOK_AUTHOR&#10;────────────&#10;ISBN (PK, FK)&#10;author_id (PK, FK)"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="360" width="260" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- PUBLISHER -->
+        <mxCell id="PUBLISHER" value="PUBLISHER&#10;────────────&#10;pub_id (PK)&#10;name&#10;address&#10;phone"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="180" width="240" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- STOCK -->
+        <mxCell id="STOCK" value="STOCK&#10;────────────&#10;ISBN (PK, FK)&#10;quantity&#10;threshold"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="420" width="240" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- PUBLISHER ORDER -->
+        <mxCell id="PUBLISHER_ORDER" value="PUBLISHER_ORDER&#10;────────────&#10;order_id (PK)&#10;isbn (FK)&#10;pub_id (FK)&#10;order_date&#10;quantity&#10;status"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="600" width="260" height="180" as="geometry"/>
+        </mxCell>
+
+        <!-- CUSTOMER -->
+        <mxCell id="CUSTOMER" value="CUSTOMER&#10;────────────&#10;cust_id (PK)&#10;fname&#10;lname&#10;email&#10;phone&#10;address&#10;username&#10;password&#10;role"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="300" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- CART -->
+        <mxCell id="CART" value="CART&#10;────────────&#10;cart_id (PK)&#10;cust_id (FK)"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="520" width="240" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- CART ITEMS -->
+        <mxCell id="CART_ITEMS" value="CART_ITEMS&#10;────────────&#10;cart_id (PK, FK)&#10;isbn (PK, FK)&#10;quantity"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="700" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- PURCHASES -->
+        <mxCell id="PURCHASES" value="PURCHASES&#10;────────────&#10;pur_id (PK)&#10;date&#10;total_amount&#10;cust_id (FK)"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="860" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- PURCHASE ITEM -->
+        <mxCell id="PURCHASE_ITEM" value="PURCHASE_ITEM&#10;────────────&#10;pur_id (PK, FK)&#10;isbn (PK, FK)&#10;quantity&#10;price"
+          style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="860" width="260" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- RELATIONSHIPS -->
+
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="PUBLISHER"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="STOCK"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="BOOK_AUTHOR"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="AUTHOR" target="BOOK_AUTHOR"/>
+
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="PUBLISHER_ORDER"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="PUBLISHER" target="PUBLISHER_ORDER"/>
+
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="CUSTOMER" target="CART"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="CART" target="CART_ITEMS"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="CART_ITEMS"/>
+
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="CUSTOMER" target="PURCHASES"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="PURCHASES" target="PURCHASE_ITEM"/>
+        <mxCell style="endArrow=none;" edge="1" parent="1" source="BOOK" target="PURCHASE_ITEM"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
