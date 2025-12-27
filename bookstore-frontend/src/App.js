@@ -7,10 +7,14 @@ import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
 import CustomerInfo from "./components/CustomerInfo";
 import AddBook from "./components/AddBook";
+import ModifyBook from "./components/ModifyBook";
 import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null); // store logged-in user
+
+  // Helper to get token safely
+  const token = localStorage.getItem("token");
 
   if (!user) {
     return (
@@ -31,30 +35,56 @@ function App() {
         <Route path="/home" element={<Home user={user} />} />
   
         <Route
-  path="/cart"
-  element={<Cart user={user} token={localStorage.getItem("token")} />}
-/>
+          path="/cart"
+          element={<Cart user={user} token={token} />}
+        />
 
         <Route
           path="/customer"
           element={
             <CustomerInfo
               customer={user}
-              token={localStorage.getItem("token")}
+              token={token}
             />
           }
         />
-        <Route path="*" element={<Navigate to="/home" />} />
+
         <Route
-        path="/add-book"
-        element={
-          user.role === "admin" ? (
-            <AddBook />
-          ) : (
-            <Navigate to="/home" />
-          )
-        }
-      />
+          path="/add-book"
+          element={
+            user.role === "admin" ? (
+              <AddBook token={token} />
+            ) : (
+              <Navigate to="/home" />
+            )
+          }
+        />
+
+        {}
+        <Route
+          path="/modify-book/:isbn"
+          element={
+            user.role === "admin" ? (
+              <ModifyBook token={token} />
+            ) : (
+              <Navigate to="/home" />
+            )
+          }
+        />
+
+        {/* This covers just /modify-book (the search page) */}
+        <Route
+          path="/modify-book"
+          element={
+            user.role === "admin" ? (
+              <ModifyBook token={token} />
+            ) : (
+              <Navigate to="/home" />
+            )
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
   );

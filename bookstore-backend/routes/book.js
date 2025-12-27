@@ -88,29 +88,59 @@ router.post("/add", async (req, res) => {
 router.put("/update/:ISBN", async (req, res) => {
   const { ISBN } = req.params;
   const { title, pub_year, selling_price, category, pub_id, quantity, threshold } = req.body;
+  
+  const connection = await db.getConnection();
 
   try {
-    // Update book info
-    await db.execute(
+    await connection.beginTransaction();
+
+    const [bookExists] = await connection.execute("SELECT 1 FROM book WHERE ISBN = ?", [ISBN]);
+    if (bookExists.length === 0) {
+      await connection.rollback();
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    if (pub_id) {
+      const [pub] = await connection.execute("SELECT 1 FROM publisher WHERE pub_id = ?", [pub_id]);
+      if (pub.length === 0) {
+        await connection.rollback();
+        return res.status(400).json({ error: "Publisher ID does not exist" });
+      }
+    }
+
+    await connection.execute(
       `UPDATE book SET title=?, pub_year=?, selling_price=?, category=?, pub_id=? WHERE ISBN=?`,
       [title, pub_year, selling_price, category, pub_id, ISBN]
     );
 
-    // Update stock quantity and threshold
     if (quantity !== undefined || threshold !== undefined) {
-      const [stock] = await db.execute("SELECT quantity FROM stock WHERE ISBN=?", [ISBN]);
-      const newQuantity = quantity !== undefined ? quantity : stock[0].quantity;
-      if (newQuantity < 0) return res.status(400).json({ error: "Quantity cannot be negative" });
+      const [stock] = await connection.execute("SELECT quantity, threshold FROM stock WHERE ISBN=? FOR UPDATE", [ISBN]);
+      
+      const currentQty = stock.length > 0 ? stock[0].quantity : 0;
+      const currentThreshold = stock.length > 0 ? stock[0].threshold : 0;
 
-      await db.execute(
+      const newQuantity = quantity !== undefined ? quantity : currentQty;
+      const newThreshold = threshold !== undefined ? threshold : currentThreshold;
+
+      if (newQuantity < 0) {
+        await connection.rollback();
+        return res.status(400).json({ error: "Quantity cannot be negative" });
+      }
+
+      await connection.execute(
         "UPDATE stock SET quantity=?, threshold=? WHERE ISBN=?",
-        [newQuantity, threshold || stock[0].threshold, ISBN]
+        [newQuantity, newThreshold, ISBN]
       );
     }
 
+    await connection.commit();
     res.json({ message: "Book updated successfully" });
+
   } catch (err) {
+    await connection.rollback();
     res.status(500).json({ error: err.message });
+  } finally {
+    connection.release();
   }
 });
 
