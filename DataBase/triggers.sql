@@ -29,7 +29,7 @@ BEGIN
     DECLARE v_publisher_id INT;
     DECLARE v_order_quantity INT DEFAULT 50;
     
-    IF OLD.quantity >= OLD.threshold AND NEW.quantity < NEW.threshold THEN
+    IF NEW.quantity < NEW.threshold THEN
         SELECT pub_id INTO v_publisher_id
         FROM book
         WHERE ISBN = NEW.ISBN;
