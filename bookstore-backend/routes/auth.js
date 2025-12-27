@@ -25,7 +25,9 @@ router.post("/register", (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
+  console.log("Login request received with body:", req.body);
   const { username, password } = req.body;
+
 
   db.query("SELECT * FROM customer WHERE username = ?", [username], async (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });

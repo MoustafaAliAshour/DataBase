@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
 import CustomerInfo from "./components/CustomerInfo";
+import AddBook from "./components/AddBook";
 import "./App.css";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/home" element={<Home user={user} />} />
+  
         <Route
   path="/cart"
   element={<Cart user={user} token={localStorage.getItem("token")} />}
@@ -43,6 +45,16 @@ function App() {
           }
         />
         <Route path="*" element={<Navigate to="/home" />} />
+        <Route
+        path="/add-book"
+        element={
+          user.role === "admin" ? (
+            <AddBook />
+          ) : (
+            <Navigate to="/home" />
+          )
+        }
+      />
       </Routes>
     </Router>
   );

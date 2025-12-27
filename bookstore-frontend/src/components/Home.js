@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
 
 const Home = ({ user }) => {
+  const navigate = useNavigate();  
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -88,7 +90,7 @@ const fetchBooks = async () => {
       alert(data.message);
     } else {
       alert("Failed to add to cart: " + data.error);
-      console.error("Server error:", data);
+      console.error("Server errorrrr:", data);
     }
   } catch (err) {
     console.error("Error adding to cart:", err);
@@ -112,10 +114,15 @@ const fetchBooks = async () => {
         <button type="submit">Search</button>
       </form>
 
-      {user.role === "admin" && (
+      {user?.role === "admin" && (
         <div className="admin-actions">
-          <button onClick={() => alert("Navigate to Add Book Page")}>Add New Book</button>
-          <button onClick={() => alert("Navigate to Modify Book Page")}>Modify Book</button>
+          <button onClick={() => navigate("/add-book")}>
+            Add New Book
+          </button>
+
+          <button onClick={() => navigate("/modify-book")}>
+            Modify Book
+          </button>
         </div>
       )}
       <div className="books-grid">

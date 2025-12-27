@@ -11,12 +11,16 @@ const Login = ({ setUser }) => {
     const password = e.target.password.value;
 
     try {
+
+      console.log("Attempting login with:", { username, password });
+
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-
+      
+      console.log("Attempting login with:", { username, password });
       const data = await res.json();
 
       if (!res.ok) {
@@ -26,6 +30,7 @@ const Login = ({ setUser }) => {
 
       setUser(data.user);
       localStorage.setItem("token", data.token);
+          alert("Logged in successfully!");
       navigate("/home");
     } catch (err) {
       alert("Server error");

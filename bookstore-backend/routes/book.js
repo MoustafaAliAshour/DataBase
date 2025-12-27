@@ -33,19 +33,52 @@ router.get("/search", (req, res) => {
 // 3. Admin: Add new book
 
 router.post("/add", async (req, res) => {
-  const { ISBN, title, pub_year, selling_price, category, pub_id, threshold } = req.body;
+  const { ISBN, title, pub_year, selling_price, category, pub_id, threshold, author_id } = req.body;
+  const connection = await db.getConnection();
   try {
-    await db.execute(
+    await connection.beginTransaction();
+
+    // Check if publisher exists
+    const [pub] = await connection.execute("SELECT 1 FROM publisher WHERE pub_id = ?", [pub_id]);
+    if (pub.length === 0) {
+      await connection.rollback();
+      return res.status(400).json({ error: "Publisher ID does not exist" });
+    }
+
+    // Check if author exists
+    const [auth] = await connection.execute("SELECT 1 FROM author WHERE author_id = ?", [author_id]);
+    if (auth.length === 0) {
+      await connection.rollback();
+      return res.status(400).json({ error: "Author ID does not exist" });
+    }
+
+    // Check if ISBN already exists
+    const [bookExists] = await connection.execute("SELECT 1 FROM book WHERE ISBN = ?", [ISBN]);
+    if (bookExists.length > 0) {
+      await connection.rollback();
+      return res.status(400).json({ error: "Book with this ISBN already exists" });
+    }
+
+    await connection.execute(
       `INSERT INTO book (ISBN, title, pub_year, selling_price, category, pub_id) VALUES (?, ?, ?, ?, ?, ?)`,
       [ISBN, title, pub_year, selling_price, category, pub_id]
     );
-    await db.execute(
-      `INSERT INTO stock (ISBN, quantity, threshold) VALUES (?, 0, ?)`,
+    await connection.execute(
+      `INSERT INTO stock (ISBN, quantity, threshold) VALUES (?, 0, ?) ON DUPLICATE KEY UPDATE quantity = 0, threshold = VALUES(threshold)`,
       [ISBN, threshold]
     );
+    await connection.execute(
+      `INSERT INTO written_by (ISBN, author_id) VALUES (?, ?)`,
+      [ISBN, author_id]
+    );
+
+    await connection.commit();
     res.json({ message: "Book added successfully" });
   } catch (err) {
+    await connection.rollback();
     res.status(500).json({ error: err.message });
+  } finally {
+    connection.release();
   }
 });
 
