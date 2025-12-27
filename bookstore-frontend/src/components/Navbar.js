@@ -9,9 +9,13 @@ const Navbar = ({ user, setUser }) => {
     navigate("/");
   };
 
-  const goToProfile = () => {
-    navigate("/customer"); // Navigate to CustomerInfo page
+ const goToCart = () => {
+    if (!user?.cust_id) return;
+    navigate("/cart", { state: { cust_id: user.cust_id } });
   };
+  const goToProfile = () => {
+  navigate("/customer", { state: { cust_id: user.cust_id } });
+};
 
   return (
     <nav className="navbar">
@@ -25,7 +29,7 @@ const Navbar = ({ user, setUser }) => {
         </span>
 
         {/* Cart link */}
-        <Link to="/cart" className="cart-icon" style={{ marginRight: "10px" }}>🛒</Link>
+        <Link to="/cart" onClick={goToCart} className="cart-icon" style={{ marginRight: "10px" }}>🛒</Link>
 
         {/* Logout button */}
         <button onClick={handleLogout} className="logout-btn">

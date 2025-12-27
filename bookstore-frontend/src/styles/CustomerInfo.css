@@ -1,69 +1,103 @@
-
+/* CustomerInfo.css */
 
 .customer-info {
   max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 30px auto;
+  padding: 25px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 }
 
 .customer-info h2 {
   text-align: center;
-  color: #1a1a1a;
-  margin-bottom: 25px;
-  font-size: 28px;
-  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.customer-info label {
+.field-container {
+  margin-bottom: 20px;
+}
+
+.field-container label {
   display: block;
-  margin: 15px 0 5px;
-  font-weight: 500;
-  color: #333333;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
 }
 
-.customer-info input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid #cccccc;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s;
+.field-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 }
 
-.customer-info input:focus {
-  outline: none;
-  border-color: #4a90e2;
+.field-display span {
+  color: #333;
 }
 
-.customer-info button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  background-color: #4a90e2;
-  color: #ffffff;
+.field-display button {
+  background-color: #007bff;
   border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: 500;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 0.9rem;
+  transition: background 0.2s;
 }
 
-.customer-info button:hover {
-  background-color: #357ABD;
+.field-display button:hover {
+  background-color: #0056b3;
 }
 
-.customer-info p {
+.edit-input {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-input input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.edit-input button {
+  background-color: #28a745;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.edit-input button:hover {
+  background-color: #1e7e34;
+}
+
+.eye-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.message {
   margin-top: 15px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 5px;
   text-align: center;
-  font-weight: 500;
-  color: #28a745; 
-}
-
-.customer-info p.error {
-  color: #d9534f; 
 }

@@ -1,19 +1,16 @@
 const db = require('../db/connection');
 const bcrypt = require('bcryptjs');
 
-// Update customer profile (email, phone, address, password)
 exports.updateProfile = async (req, res) => {
   const { cust_id } = req.params;
   const { email, phone, address, password } = req.body;
 
   try {
-    // Hash the password if it is being updated
     let hashedPassword = null;
-    if (password) {
+    if (password && password.trim() !== '') {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    // Build the update query dynamically
     const fields = [];
     const values = [];
 
@@ -41,9 +38,11 @@ exports.updateProfile = async (req, res) => {
     values.push(cust_id);
 
     const query = `UPDATE customer SET ${fields.join(", ")} WHERE cust_id = ?`;
-    await db.execute(query, values);
 
-    res.json({ message: "Profile updated successfully" });
+    db.query(query, values, (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: "Profile updated successfully" });
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

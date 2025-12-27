@@ -8,7 +8,10 @@ const Home = ({ user }) => {
   useEffect(() => {
     fetchBooks();
   }, []);
-
+useEffect(() => {
+  console.log("User object:", user);
+  console.log("Customer ID:", user?.cust_id);
+}, [user]);
 const fetchBooks = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/books");
@@ -46,14 +49,54 @@ const fetchBooks = async () => {
   };
 
   const addToCart = async (isbn) => {
+  // More robust validation
+  if (!user) {
+    alert("Please log in first!");
+    return;
+  }
+  
+  if (!user.cust_id) {
+    alert("Customer ID is missing. Please log in again.");
+    console.error("User object:", user);
+    return;
+  }
+
+  if (!isbn) {
+    alert("Book ISBN is missing!");
+    return;
+  }
+
+  console.log("Full request body:", JSON.stringify({ 
+  cust_id: user.cust_id, 
+  ISBN: isbn, 
+  quantity: 1 
+}));
+
+  try {
     const res = await fetch("http://localhost:5000/api/cart/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cust_id: user.cust_id, ISBN: isbn, quantity: 1 }),
+      body: JSON.stringify({ 
+        cust_id: user.cust_id, 
+        ISBN: isbn, 
+        quantity: 1 
+      }),
     });
+
     const data = await res.json();
-    alert(data.message);
-  };
+    if (res.ok) {
+      alert(data.message);
+    } else {
+      alert("Failed to add to cart: " + data.error);
+      console.error("Server error:", data);
+    }
+  } catch (err) {
+    console.error("Error adding to cart:", err);
+    alert("Network error adding to cart");
+  }
+};
+
+
 
   return (
     <div className="home-container">
@@ -84,7 +127,11 @@ const fetchBooks = async () => {
             <p><b>Price:</b> ${book.selling_price}</p>
             <p><b>Status:</b> {book.stock_status}</p>
             {user.role === "customer" && (
-              <button onClick={() => addToCart(book.ISBN)}>Add to Cart</button>
+              <button onClick={() => {
+  console.log("Adding to cart:", book.ISBN, user?.cust_id);
+  addToCart(book.ISBN);
+}}>Add to Cart</button>
+
             )}
           </div>
         ))}

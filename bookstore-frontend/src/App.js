@@ -28,7 +28,11 @@ function App() {
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/home" element={<Home user={user} />} />
-        <Route path="/cart" element={<Cart user={user} />} />
+        <Route
+  path="/cart"
+  element={<Cart user={user} token={localStorage.getItem("token")} />}
+/>
+
         <Route
           path="/customer"
           element={
