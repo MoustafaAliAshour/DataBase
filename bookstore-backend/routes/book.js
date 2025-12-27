@@ -5,31 +5,30 @@ const router = express.Router();
 
 // 1. Get all books
 
-router.get("/", async (req, res) => {
-  try {
-    const [books] = await db.execute("SELECT * FROM vw_book_details");
+router.get("/", (req, res) => {
+  db.query("SELECT * FROM vw_book_details", (err, books) => {
+    if (err) return res.status(500).json({ error: err.message });
     res.json(books);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  });
 });
 
-
-// 2. Search books by title, category, author, publisher
-
-router.get("/search", async (req, res) => {
+// 2. Search books
+router.get("/search", (req, res) => {
   const { search } = req.query;
-  try {
-    const [books] = await db.execute(
-      `SELECT * FROM vw_book_details WHERE title LIKE ? OR category LIKE ? OR authors LIKE ? OR publisher_name LIKE ?`,
-      [`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`]
-    );
-    res.json(books);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
+  db.query(
+    `SELECT * FROM vw_book_details 
+     WHERE title LIKE ? 
+     OR category LIKE ? 
+     OR authors LIKE ? 
+     OR publisher_name LIKE ?`,
+    [`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`],
+    (err, books) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(books);
+    }
+  );
+});
 
 // 3. Admin: Add new book
 
@@ -83,3 +82,4 @@ router.put("/update/:ISBN", async (req, res) => {
 });
 
 module.exports = router;
+

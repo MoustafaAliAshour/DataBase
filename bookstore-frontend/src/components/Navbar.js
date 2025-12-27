@@ -9,14 +9,28 @@ const Navbar = ({ user, setUser }) => {
     navigate("/");
   };
 
+  const goToProfile = () => {
+    navigate("/customer"); // Navigate to CustomerInfo page
+  };
+
   return (
     <nav className="navbar">
       <div className="logo">
         <Link to="/home">Kootoby</Link>
       </div>
       <div className="nav-right">
-        <span className="user-name" onClick={handleLogout}>{user.fname}</span>
-        <Link to="/cart" className="cart-icon">🛒</Link>
+        {/* Customer name clickable to go to profile */}
+        <span className="user-name" onClick={goToProfile} style={{ cursor: "pointer", marginRight: "10px" }}>
+          {user.fname}
+        </span>
+
+        {/* Cart link */}
+        <Link to="/cart" className="cart-icon" style={{ marginRight: "10px" }}>🛒</Link>
+
+        {/* Logout button */}
+        <button onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
       </div>
     </nav>
   );

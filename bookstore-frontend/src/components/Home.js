@@ -9,17 +9,40 @@ const Home = ({ user }) => {
     fetchBooks();
   }, []);
 
-  const fetchBooks = async () => {
-    const res = await fetch("http://localhost:5000/api/books");
-    const data = await res.json();
-    setBooks(data);
+const fetchBooks = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/books");
+      const data = await res.json();
+      
+
+      // Only set books if data is an array
+      if (Array.isArray(data)) {
+        setBooks(data);
+      } else {
+        console.error("API returned an error:", data);
+        setBooks([]); // Set empty array to prevent crash
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+    }
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:5000/api/books?search=${search}`);
-    const data = await res.json();
-    setBooks(data);
+    try {
+      const res = await fetch(`http://localhost:5000/api/books/search?search=${search}`);
+      const data = await res.json();
+      // console.log("Fetched data:", data); // Check console to see what is returned
+      
+      if (Array.isArray(data)) {
+        setBooks(data);
+      } else {
+        console.error("Search API returned an error:", data);
+        setBooks([]);
+      }
+    } catch (err) {
+      console.error("Search failed:", err);
+    }
   };
 
   const addToCart = async (isbn) => {
@@ -52,7 +75,6 @@ const Home = ({ user }) => {
           <button onClick={() => alert("Navigate to Modify Book Page")}>Modify Book</button>
         </div>
       )}
-
       <div className="books-grid">
         {books.map((book) => (
           <div key={book.ISBN} className="book-card">
@@ -72,3 +94,6 @@ const Home = ({ user }) => {
 };
 
 export default Home;
+
+
+

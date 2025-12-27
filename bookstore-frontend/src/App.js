@@ -5,6 +5,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
+import CustomerInfo from "./components/CustomerInfo";
 import "./App.css";
 
 function App() {
@@ -28,6 +29,15 @@ function App() {
       <Routes>
         <Route path="/home" element={<Home user={user} />} />
         <Route path="/cart" element={<Cart user={user} />} />
+        <Route
+          path="/customer"
+          element={
+            <CustomerInfo
+              customer={user}
+              token={localStorage.getItem("token")}
+            />
+          }
+        />
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>

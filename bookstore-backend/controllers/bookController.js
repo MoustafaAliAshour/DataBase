@@ -2,10 +2,10 @@ const db = require('../db/connection');
 
 exports.getAllBooks = async (req, res) => {
   try {
-    const [books] = await db.execute('SELECT * FROM vw_book_details');
+    const [books] = await db.execute('SELECT * FROM `vw_book_details`');
     res.json(books);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(800).json({ error: err.message });
   }
 };
 
